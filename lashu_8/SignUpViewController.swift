@@ -47,6 +47,7 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
         if hasEmptyFields() {
             print("❌ Empty fields detected")
             canRegister = false
+            alert1.addAction(UIAlertAction(title: "OK", style: .default))
             self.present(alert1, animated: true)
             return
         }
@@ -54,7 +55,9 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
         if !passwordValidation() {
             print("❌ Password validation failed")
             canRegister = false
+            alert2.addAction(UIAlertAction(title: "OK", style: .default))
             self.present(alert2, animated: true)
+            
             return
         }
         
