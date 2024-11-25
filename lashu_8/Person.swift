@@ -6,14 +6,15 @@
 //
 
 import UIKit
+
 struct Person{
     var username: String
     var email: String
     var password: String
     var phoneNumber: String
-    var image: Data?
+    var image: UIImage?
     
-    init(username: String, email: String, password: String, phoneNumber: String, image: Data? = nil) {
+    init(username: String, email: String, password: String, phoneNumber: String, image: UIImage? = nil) {
         self.username = username
         self.email = email
         self.password = password

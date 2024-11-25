@@ -17,6 +17,8 @@
 					<string>$(PRODUCT_MODULE_NAME).SceneDelegate</string>
 					<key>UISceneStoryboardFile</key>
 					<string>SignUpView</string>
+                    <key>NSPhotoLibraryUsageDescription</key>
+                    <string>We need access to your photo library to let you select images.</string>
 				</dict>
 			</array>
 		</dict>

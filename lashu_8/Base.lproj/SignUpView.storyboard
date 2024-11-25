@@ -34,6 +34,13 @@
                                                             <constraint firstAttribute="height" constant="120" id="wga-tG-jNa"/>
                                                         </constraints>
                                                     </imageView>
+                                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Bhv-DE-d7K">
+                                                        <rect key="frame" x="119" y="117" width="107" height="35"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                        <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <state key="normal" title="Button"/>
+                                                        <buttonConfiguration key="configuration" style="tinted" title="pick Image"/>
+                                                    </button>
                                                 </subviews>
                                                 <constraints>
                                                     <constraint firstItem="kwN-OU-WHo" firstAttribute="centerX" secondItem="logo-container" secondAttribute="centerX" id="logo-center-x"/>
@@ -131,6 +138,7 @@
                         <outlet property="imageView" destination="kwN-OU-WHo" id="JYl-zc-mh3"/>
                         <outlet property="passwordTextField" destination="CMT-cR-ufl" id="acm-er-8Q2"/>
                         <outlet property="phoneNumberTextField" destination="UYM-5N-tp3" id="EfX-RL-bih"/>
+                        <outlet property="pickImageButton" destination="Bhv-DE-d7K" id="OUB-md-pc9"/>
                         <outlet property="registerButton" destination="AOX-k9-5sF" id="Io3-eE-60R"/>
                         <outlet property="usernameTextField" destination="qxx-db-a3V" id="Un1-R7-OUa"/>
                     </connections>
@@ -168,7 +176,7 @@
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="email" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7Ta-n3-GPO">
                                                 <rect key="frame" x="20" y="69" width="200" height="42"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="200" id="MlY-EE-vxw"/>
+                                                    <constraint firstAttribute="width" constant="200" id="MlY-EE-vxw"/>
                                                 </constraints>
                                                 <fontDescription key="fontDescription" type="system" pointSize="19"/>
                                                 <nil key="textColor"/>

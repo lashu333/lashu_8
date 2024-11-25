@@ -31,9 +31,12 @@ class HomeViewController: UIViewController {
     */
     func setUp(){
         if let user = user{
+            imageView?.image = user.image
             usernameView?.text? = user.username
             emailView?.text? = user.email
             phoneNumberView?.text? = user.phoneNumber
+        } else{
+            usernameView?.text? = "information not available"
         }
     }
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
