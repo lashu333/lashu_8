@@ -115,7 +115,6 @@ class SignUpViewController: UIViewController, UINavigationControllerDelegate, UI
             )
             homeVC.user = user
             //navigationController?.pushViewController(homeVC, animated: true)
-            //shen rogorc gkonda sign up ro ewera ukan gamosasvlel buttons me ver shevcvale amitom ubralod fullscreenit gavushvi presentit
             homeVC.modalPresentationStyle = .fullScreen
             present(homeVC, animated: true , completion: nil)
         }
