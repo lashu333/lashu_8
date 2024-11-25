@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  SignUpViewController.swift
 //  lashu_8
 //
 //  Created by Lasha Tavberidze on 24.11.24.
@@ -11,16 +11,16 @@ class SignUpViewController: UIViewController, UINavigationControllerDelegate, UI
     /// img picker protocol
     func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
         picker.dismiss(animated: true, completion: nil)
-
-               guard let result = results.first else { return }
-               if result.itemProvider.canLoadObject(ofClass: UIImage.self) {
-                   result.itemProvider.loadObject(ofClass: UIImage.self) { [weak self] image, error in
-                       guard let self = self, let selectedImage = image as? UIImage else { return }
-                       DispatchQueue.main.async {
-                           self.imageView.image = selectedImage
-                       }
-                   }
-               }
+        
+        guard let result = results.first else { return }
+        if result.itemProvider.canLoadObject(ofClass: UIImage.self) {
+            result.itemProvider.loadObject(ofClass: UIImage.self) { [weak self] image, error in
+                guard let self = self, let selectedImage = image as? UIImage else { return }
+                DispatchQueue.main.async {
+                    self.imageView.image = selectedImage
+                }
+            }
+        }
     }
     /// imported UI stuff
     @IBOutlet weak var pickImageButton: UIButton!
@@ -34,24 +34,31 @@ class SignUpViewController: UIViewController, UINavigationControllerDelegate, UI
     let toolBar = UIToolbar()
     /// toolBar for done and next buttons, nextis dawera mezareba
     ///
-    let alert1 = UIAlertController(title: "Nuh-uh!", message: "Fill the fields!", preferredStyle: .alert)
-    let alert2 = UIAlertController(title: "password too short,it should be at least 8 symbols!", message: "enter a bigger password!",
-                                preferredStyle: .alert)
-    /// created alerts, on which i will append action "ok" later on, since they can't be closed
-    ///
     override func viewDidLoad() {
         super.viewDidLoad()
+        navigationController?.title = "SignUp"
         passwordTextField.isSelected = false
         passwordTextField.isSecureTextEntry = true
         setUpToolBar()
-        alert1.addAction(UIAlertAction(title: "OK", style: .default))
-        alert2.addAction(UIAlertAction(title: "OK", style: .default))
+        phoneNumberTextField.keyboardType = .decimalPad
+        pickImageButton.addTarget(self, action: #selector(pickImage), for: .touchUpInside)
+    }
+    ///email validation regex i found on internet
+    ///
+    func isValidEmail(_ email: String) -> Bool {
+        let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
         
-                
-            
-               pickImageButton.addTarget(self, action: #selector(pickImage), for: .touchUpInside)
+        let emailPred = NSPredicate(format:"SELF MATCHES %@", emailRegEx)
+        return emailPred.evaluate(with: email)
     }
     
+    ///
+    ///checking value
+    ///
+    func isInputtedEmailValid()->Bool{
+        let email = emailTextField.text ?? ""
+        return isValidEmail(email)
+    }
     /// toolBar function ,which adds done button to created UIToolBar instance
     private func setUpToolBar(){
         toolBar.sizeToFit()
@@ -80,51 +87,67 @@ class SignUpViewController: UIViewController, UINavigationControllerDelegate, UI
     }
     /// when tapping register button if fields arent empty and password is longer than 8 symbols, we can navigate to home view controller, or sign up
     @IBAction func didTapRegisterButton(_ sender: UIButton) {
-            if hasEmptyFields() {
-                presentAlert(title: "Nuh-uh!", message: "Fill the fields!")
-                return
-            }
-
-            if !isPasswordValid() {
-                presentAlert(title: "Password too short", message: "It should be at least 8 symbols!")
-                return
-            }
-
-            navigateToHomeViewController()
+        if hasEmptyFields() {
+            presentAlert(title: "Nuh-uh!", message: "Fill the fields!")
+            return
         }
-    ///  this function creates homeViewController instance  or instantiates the view controller, idk. vkmni sheyvanili fieldebidan users da vawvdi users shekknil instancirebul homeviews. push view
+        if !isPasswordValid() {
+            presentAlert(title: "Password too short", message: "It should be at least 8 symbols!")
+            return
+        }
+        if !isInputtedEmailValid(){
+            presentAlert(title: "input actual email", message: "in the email field please input a valid email")
+        }
+        if !passwordContainsUppercase(){
+            presentAlert(title: "password issue!", message: "password must contain an uppercase letter")
+        }
+        navigateToHomeViewController()
+    }
+    ///  this function creates homeViewController instance  or instantiates the view controller, idk. vkmni sheyvanili fieldebidan users da vawvdi users shekmnil instancirebul homeviews. push view, present.
     private func navigateToHomeViewController() {
-           if let homeVC = storyboard?.instantiateViewController(identifier: "HomeViewController") as? HomeViewController {
-               let user = Person(
-                   username: usernameTextField.text ?? "",
-                   email: emailTextField.text ?? "",
-                   password: passwordTextField.text ?? "",
-                   phoneNumber: phoneNumberTextField.text ?? "",
-                   image: imageView?.image
-               )
-               homeVC.user = user
-               navigationController?.pushViewController(homeVC, animated: true)
-           }
-       }
+        if let homeVC = storyboard?.instantiateViewController(identifier: "HomeViewController") as? HomeViewController {
+            let user = Person(
+                username: usernameTextField.text ?? "",
+                email: emailTextField.text ?? "",
+                password: passwordTextField.text ?? "",
+                phoneNumber: phoneNumberTextField.text ?? "",
+                image: imageView?.image
+            )
+            homeVC.user = user
+            //navigationController?.pushViewController(homeVC, animated: true)
+            //shen rogorc gkonda sign up ro ewera ukan gamosasvlel buttons me ver shevcvale amitom ubralod fullscreenit gavushvi presentit
+            homeVC.modalPresentationStyle = .fullScreen
+            present(homeVC, animated: true , completion: nil)
+        }
+    }
     /// this function changes passwords border color whenever called, based on its validity
     @IBAction func didEnterPassword(_ sender: UITextField) {
         passwordTextField.layer.borderWidth = 3
-            passwordTextField.layer.borderColor = isPasswordValid() ? UIColor.green.cgColor : UIColor.red.cgColor
-        }
+        let passwordValid = [passwordContainsUppercase(), isPasswordValid()].contains(false)
+        passwordTextField.layer.borderColor = !passwordValid ? UIColor.green.cgColor : UIColor.red.cgColor
+    }
+    @IBAction func didEnterEmail(_ sender: UITextField) {
+        emailTextField.layer.borderWidth = 3
+        emailTextField.layer.borderColor = isInputtedEmailValid() ? UIColor.green.cgColor : UIColor.red.cgColor
+    }
     /// since there are 2 alerts, rom ar gameordes kodi amitoa es funkcia
     private func presentAlert(title: String, message: String) {
-            let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "OK", style: .default))
-            present(alert, animated: true)
-        }
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        present(alert, animated: true)
+    }
     /// guardit unwraps vuketebt parolis text fields da tu nil ar iyo vtvlit da 8ze naklebi simbolo tu ak falses daabrunebs es funkcia
     private func isPasswordValid() -> Bool {
-           guard let password = passwordTextField.text else { return false }
-           return password.count >= 8
-       }
+        guard let password = passwordTextField.text else { return false }
+        return password.count >= 8
+    }
     /// empty ar unda iyos
     func hasEmptyFields() -> Bool {
         return [usernameTextField, emailTextField, passwordTextField, phoneNumberTextField].contains { $0?.text?.isEmpty ?? true }
+    }
+    func passwordContainsUppercase() -> Bool{
+        let inputPassword = passwordTextField.text ?? ""
+        return inputPassword.contains(where: { $0.isUppercase })
     }
 }
 
