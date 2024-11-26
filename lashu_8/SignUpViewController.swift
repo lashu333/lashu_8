@@ -36,6 +36,7 @@ class SignUpViewController: UIViewController, UINavigationControllerDelegate, UI
     ///
     override func viewDidLoad() {
         super.viewDidLoad()
+        // Adjust constraints for more flexibility
         navigationController?.title = "SignUp"
         passwordTextField.isSelected = false
         passwordTextField.isSecureTextEntry = true
